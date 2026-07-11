@@ -1,0 +1,19 @@
+# EngineerOS
+
+EngineerOS is a learning operating system for software engineers.
+
+## Sprint 1 Status
+In progress.
+
+## Local Development (Sprint 1 baseline)
+- Frontend: React + TypeScript
+- Backend: FastAPI (Python 3.12)
+- Database: PostgreSQL 16
+
+## Project Structure
+- frontend
+- backend
+- database
+- docs
+- scripts
+
