@@ -24,3 +24,10 @@ In progress.
 cd frontend
 npm install
 npm run dev
+## Auth API Quick Test (Sprint 2)
+
+### Register
+```bash
+curl -X POST http://127.0.0.1:8000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"alice@example.com","password":"password123","full_name":"Alice Doe"}'
