@@ -6,13 +6,18 @@ function App() {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [registerMessage, setRegisterMessage] = useState("");
+  const [registerLoading, setRegisterLoading] = useState(false);
 
-  const onSubmit = async (event: FormEvent) => {
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginMessage, setLoginMessage] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+
+  const onRegisterSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    setLoading(true);
-    setMessage("");
+    setRegisterLoading(true);
+    setRegisterMessage("");
 
     try {
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -30,55 +35,116 @@ function App() {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(data.detail ?? "Registration failed");
+        setRegisterMessage(data.detail ?? "Registration failed");
         return;
       }
 
-      setMessage(data.message ?? "Registration successful");
+      setRegisterMessage(data.message ?? "User registered successfully");
       setEmail("");
       setFullName("");
       setPassword("");
     } catch {
-      setMessage("Could not connect to backend");
+      setRegisterMessage("Could not connect to backend");
     } finally {
-      setLoading(false);
+      setRegisterLoading(false);
+    }
+  };
+
+  const onLoginSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setLoginLoading(true);
+    setLoginMessage("");
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: loginEmail,
+          password: loginPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setLoginMessage(data.detail ?? "Login failed");
+        return;
+      }
+
+      setLoginMessage(data.message ?? "Login successful");
+      setLoginEmail("");
+      setLoginPassword("");
+    } catch {
+      setLoginMessage("Could not connect to backend");
+    } finally {
+      setLoginLoading(false);
     }
   };
 
   return (
-    <main style={{ maxWidth: 520, margin: "40px auto", padding: 16 }}>
-      <h1>EngineerOS - Register</h1>
-      <p>Create your account (Sprint 2 auth integration).</p>
+    <main style={{ maxWidth: 560, margin: "40px auto", padding: 16 }}>
+      <h1>EngineerOS - Auth</h1>
+      <p>Sprint 2: Register and Login integration.</p>
 
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
-        <input
-          type="text"
-          placeholder="Full name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password (min 8 chars)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          minLength={8}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create account"}
-        </button>
-      </form>
+      <section style={{ marginTop: 24 }}>
+        <h2>Register</h2>
+        <form onSubmit={onRegisterSubmit} style={{ display: "grid", gap: 12 }}>
+          <input
+            type="text"
+            placeholder="Full name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password (min 8 chars)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            minLength={8}
+            required
+          />
+          <button type="submit" disabled={registerLoading}>
+            {registerLoading ? "Creating..." : "Create account"}
+          </button>
+        </form>
+        {registerMessage && <p style={{ marginTop: 12 }}>{registerMessage}</p>}
+      </section>
 
-      {message && <p style={{ marginTop: 16 }}>{message}</p>}
+      <section style={{ marginTop: 32 }}>
+        <h2>Login</h2>
+        <form onSubmit={onLoginSubmit} style={{ display: "grid", gap: 12 }}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={loginEmail}
+            onChange={(e) => setLoginEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={loginPassword}
+            onChange={(e) => setLoginPassword(e.target.value)}
+            minLength={8}
+            required
+          />
+          <button type="submit" disabled={loginLoading}>
+            {loginLoading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+        {loginMessage && <p style={{ marginTop: 12 }}>{loginMessage}</p>}
+      </section>
     </main>
   );
 }
