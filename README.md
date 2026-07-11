@@ -17,3 +17,10 @@ In progress.
 - docs
 - scripts
 
+## Run Locally (Sprint 1)
+
+### 1) Start Frontend
+```bash
+cd frontend
+npm install
+npm run dev
