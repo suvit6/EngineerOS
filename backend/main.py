@@ -1,5 +1,5 @@
 import os
-
+from api.auth.routes import router as auth_router
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from psycopg import connect
@@ -7,7 +7,7 @@ from psycopg import connect
 load_dotenv()
 
 app = FastAPI(title="EngineerOS API", version="0.1.0")
-
+app.include_router(auth_router)
 
 @app.get("/health")
 def health_check():
